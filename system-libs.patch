@@ -1,0 +1,39 @@
+--- apitrace-12.0/thirdparty/CMakeLists.txt.orig	2024-05-30 20:10:10.000000000 +0200
++++ apitrace-12.0/thirdparty/CMakeLists.txt	2025-05-24 15:27:36.270634240 +0200
+@@ -16,25 +16,6 @@
+     include (${ARGV})
+ endfunction ()
+ 
+-set (SUBMODULES_MISSING FALSE)
+-foreach (path IN ITEMS
+-    brotli/LICENSE
+-    gtest/LICENSE
+-    libbacktrace/LICENSE
+-    libpng/LICENSE
+-    snappy/COPYING
+-    zlib/README
+-    directxmath/LICENSE
+-)
+-    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${path}")
+-        message (SEND_ERROR "error: ${CMAKE_CURRENT_SOURCE_DIR}/${path} does not exist")
+-        set (SUBMODULES_MISSING TRUE)
+-    endif ()
+-endforeach ()
+-if (SUBMODULES_MISSING)
+-    message (FATAL_ERROR "Update Git submodules by running\ngit submodule update --init --depth 1 --recursive")
+-endif ()
+-
+ if (ENABLE_STATIC_SNAPPY OR NOT Snappy_FOUND)
+     message (STATUS "Using bundled Snappy")
+     include_with_scope (snappy.cmake)
+@@ -55,10 +36,6 @@
+     include_with_scope (brotli.cmake)
+ endif ()
+ 
+-if (CMAKE_EXECUTABLE_FORMAT STREQUAL "ELF")
+-    include_with_scope (libbacktrace.cmake)
+-endif ()
+-
+ # We use non-standard C++ flags, so we can't just use GTest's CMakeLists.txt
+ if (NOT GTEST_FOUND)
+     message (STATUS "Using bundled GTest")
