@@ -14,6 +14,7 @@ Group:		Development/Tools
 Source0:	https://github.com/apitrace/apitrace/archive/%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	822b50a96c10911f474cba51d05ff568
 Patch0:		system-libs.patch
+Patch1:		no-debian-multiarch.patch
 URL:		https://apitrace.github.io/
 %if %{with qt}
 BuildRequires:	Qt5Core-devel >= %{qtver}
@@ -56,6 +57,7 @@ Qt based GUI for apitrace.
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' scripts/*.py
 
