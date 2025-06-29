@@ -1,7 +1,7 @@
 #
 # Conditional build:
 %bcond_without	qt		# Qt GUI
-%bcond_without	sse42		# SSE 4.2 instructions
+%bcond_with	sse42		# SSE 4.2 instructions
 
 %define		qtver	5.15
 
