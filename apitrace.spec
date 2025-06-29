@@ -7,18 +7,17 @@
 
 Summary:	Tools for tracing OpenGL, Direct3D and other graphics APIs
 Name:		apitrace
-Version:	12.0
+Version:	13.0
 Release:	1
 License:	MIT
 Group:		Development/Tools
 Source0:	https://github.com/apitrace/apitrace/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	822b50a96c10911f474cba51d05ff568
+# Source0-md5:	6adbb46c84361511d4954875ff045e28
 Patch0:		system-libs.patch
 Patch1:		no-debian-multiarch.patch
 URL:		https://apitrace.github.io/
 %if %{with qt}
 BuildRequires:	Qt5Core-devel >= %{qtver}
-BuildRequires:	Qt5Network-devel >= %{qtver}
 BuildRequires:	Qt5Widgets-devel >= %{qtver}
 %endif
 BuildRequires:	cmake >= 3.15.0
