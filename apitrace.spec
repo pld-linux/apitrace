@@ -6,6 +6,7 @@
 %define		qtver	5.15
 
 Summary:	Tools for tracing OpenGL, Direct3D and other graphics APIs
+Summary(pl.UTF-8):	Narzędzia do śledzenia OpenGL, Direct3D i innych API graficznych
 Name:		apitrace
 Version:	13.0
 Release:	1
@@ -43,8 +44,18 @@ apitrace consists of a set of tools to:
 - inspect OpenGL and Direct3D state at any call while retracing
 - visualize and edit trace files
 
+%description -l pl.UTF-8
+apitrace składa się z zestawu narzędzi do:
+- śledzenia wywołań API OpenGL, Direct3D i DirectDraw z zapisem do
+  pliku
+- odtwarzania wywołań OpenGL i Direct3D z pliku
+- podglądania stanu OpenGL i Direct3D przy dowolnym śledzonym
+  wywołaniu
+- wizualizacji i edycji plików śladów
+
 %package gui
 Summary:	Qt based GUI for apitrace
+Summary(pl.UTF-8):	Oparte na Qt GUI do apitrace
 Group:		Development/Tools
 Requires:	Qt5Core >= %{qtver}
 Requires:	Qt5Network >= %{qtver}
@@ -52,6 +63,9 @@ Requires:	Qt5Widgets >= %{qtver}
 
 %description gui
 Qt based GUI for apitrace.
+
+%description gui -l pl.UTF-8
+Oparte na Qt GUI do apitrace.
 
 %prep
 %setup -q
