@@ -3,7 +3,7 @@
 %bcond_without	qt		# Qt GUI
 %bcond_with	sse42		# SSE 4.2 instructions
 
-%define		qtver	5.15
+%define		qt_ver	5.15
 
 Summary:	Tools for tracing OpenGL, Direct3D and other graphics APIs
 Summary(pl.UTF-8):	Narzędzia do śledzenia OpenGL, Direct3D i innych API graficznych
@@ -18,8 +18,8 @@ Patch0:		system-libs.patch
 Patch1:		no-debian-multiarch.patch
 URL:		https://apitrace.github.io/
 %if %{with qt}
-BuildRequires:	Qt5Core-devel >= %{qtver}
-BuildRequires:	Qt5Widgets-devel >= %{qtver}
+BuildRequires:	Qt5Core-devel >= %{qt_ver}
+BuildRequires:	Qt5Widgets-devel >= %{qt_ver}
 %endif
 BuildRequires:	cmake >= 3.15.0
 BuildRequires:	gtest-devel
@@ -29,7 +29,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel >= 6:8
 BuildRequires:	pkgconfig
 BuildRequires:	python3
-BuildRequires:	rpmbuild(macros) >= 1.742
+BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRequires:	snappy-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel >= 1.2.6
@@ -57,9 +57,9 @@ apitrace składa się z zestawu narzędzi do:
 Summary:	Qt based GUI for apitrace
 Summary(pl.UTF-8):	Oparte na Qt GUI do apitrace
 Group:		Development/Tools
-Requires:	Qt5Core >= %{qtver}
-Requires:	Qt5Network >= %{qtver}
-Requires:	Qt5Widgets >= %{qtver}
+Requires:	Qt5Core >= %{qt_ver}
+Requires:	Qt5Network >= %{qt_ver}
+Requires:	Qt5Widgets >= %{qt_ver}
 
 %description gui
 Qt based GUI for apitrace.
@@ -77,8 +77,8 @@ Oparte na Qt GUI do apitrace.
 %build
 %cmake -B build \
 	-DENABLE_STATIC_SNAPPY:BOOL=OFF \
-	%{cmake_on_off qt ENABLE_GUI} \
-	%{cmake_on_off sse42 ENABLE_SSE42}
+	-DENABLE_GUI:BOOL=%{__ON_OFF qt} \
+	-DENABLE_SSE42:BOOL=%{__ON_OFF sse42}
 
 %{__make} -C build
 
@@ -105,8 +105,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/apitrace/scripts
 %{_libdir}/apitrace/scripts/*.py
 %dir %{_libdir}/apitrace/wrappers
-%attr(755,root,root) %{_libdir}/apitrace/wrappers/egltrace.so
-%attr(755,root,root) %{_libdir}/apitrace/wrappers/glxtrace.so
+%{_libdir}/apitrace/wrappers/egltrace.so
+%{_libdir}/apitrace/wrappers/glxtrace.so
 
 %if %{with qt}
 %files gui
