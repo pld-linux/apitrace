@@ -1,6 +1,6 @@
---- apitrace-12.0/thirdparty/CMakeLists.txt.orig	2024-05-30 20:10:10.000000000 +0200
-+++ apitrace-12.0/thirdparty/CMakeLists.txt	2025-05-24 15:27:36.270634240 +0200
-@@ -16,25 +16,6 @@
+--- apitrace-14.0/thirdparty/CMakeLists.txt.orig	2026-01-30 16:43:06.000000000 +0100
++++ apitrace-14.0/thirdparty/CMakeLists.txt	2026-04-19 15:08:41.316463297 +0200
+@@ -16,26 +16,6 @@ function (include_with_scope)
      include (${ARGV})
  endfunction ()
  
@@ -12,6 +12,7 @@
 -    libpng/LICENSE
 -    snappy/COPYING
 -    zlib/README
+-    zstd/LICENSE
 -    directxmath/LICENSE
 -)
 -    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${path}")
@@ -26,9 +27,9 @@
  if (ENABLE_STATIC_SNAPPY OR NOT Snappy_FOUND)
      message (STATUS "Using bundled Snappy")
      include_with_scope (snappy.cmake)
-@@ -55,10 +36,6 @@
-     include_with_scope (brotli.cmake)
- endif ()
+@@ -83,10 +63,6 @@ endif()
+ 
+ target_optimize(zstd_seekable)
  
 -if (CMAKE_EXECUTABLE_FORMAT STREQUAL "ELF")
 -    include_with_scope (libbacktrace.cmake)

@@ -1,6 +1,8 @@
+# TODO: waffle for EGL?
 #
 # Conditional build:
 %bcond_without	qt		# Qt GUI
+%bcond_with	qt6		# Qt 6 instead of Qt 5
 %bcond_with	sse42		# SSE 4.2 instructions
 
 %define		qt_ver	5.15
@@ -8,18 +10,27 @@
 Summary:	Tools for tracing OpenGL, Direct3D and other graphics APIs
 Summary(pl.UTF-8):	Narzędzia do śledzenia OpenGL, Direct3D i innych API graficznych
 Name:		apitrace
-Version:	13.0
+Version:	14.0
 Release:	1
 License:	MIT
 Group:		Development/Tools
+#Source0Download: https://github.com/apitrace/apitrace/releases
 Source0:	https://github.com/apitrace/apitrace/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	6adbb46c84361511d4954875ff045e28
+# Source0-md5:	d457f98e6b58d47ae0589d6d51460382
+# for zstd/contrib/seekable_format
+Source1:	https://github.com/facebook/zstd/archive/v1.5.7/zstd-1.5.7.tar.gz
+# Source1-md5:	619a019adbbc4536e7fb93cdbb01af3e
 Patch0:		system-libs.patch
 Patch1:		no-debian-multiarch.patch
 URL:		https://apitrace.github.io/
 %if %{with qt}
+%if %{with qt6}
+BuildRequires:	Qt6Core-devel >= 6
+BuildRequires:	Qt6Widgets-devel >= 6
+%else
 BuildRequires:	Qt5Core-devel >= %{qt_ver}
 BuildRequires:	Qt5Widgets-devel >= %{qt_ver}
+%endif
 %endif
 BuildRequires:	cmake >= 3.15.0
 BuildRequires:	gtest-devel
@@ -28,14 +39,16 @@ BuildRequires:	libbrotli-devel >= 1.0.7
 BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel >= 6:8
 BuildRequires:	pkgconfig
-BuildRequires:	python3
+BuildRequires:	python3 >= 1:3
 BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRequires:	snappy-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel >= 1.2.6
+BuildRequires:	zstd-devel >= 1.4.0
 %{?with_sse42:Requires:	cpuinfo(sse4_2)}
 Requires:	libbrotli >= 1.0.7
 Requires:	zlib >= 1.2.6
+Requires:	zstd >= 1.4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -58,9 +71,13 @@ apitrace składa się z zestawu narzędzi do:
 Summary:	Qt based GUI for apitrace
 Summary(pl.UTF-8):	Oparte na Qt GUI do apitrace
 Group:		Development/Tools
+%if %{with qt6}
+Requires:	Qt6Core >= 6
+Requires:	Qt6Widgets >= 6
+%else
 Requires:	Qt5Core >= %{qt_ver}
-Requires:	Qt5Network >= %{qt_ver}
 Requires:	Qt5Widgets >= %{qt_ver}
+%endif
 
 %description gui
 Qt based GUI for apitrace.
@@ -75,10 +92,13 @@ Oparte na Qt GUI do apitrace.
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' scripts/*.py
 
+%{__tar} xzf %{SOURCE1} --strip-components=1 -C thirdparty/zstd
+
 %build
 %cmake -B build \
 	-DENABLE_STATIC_SNAPPY:BOOL=OFF \
 	-DENABLE_GUI:BOOL=%{__ON_OFF qt} \
+	%{?with_qt6:-DENABLE_QT6:BOOL=OFF} \
 	-DENABLE_SSE42:BOOL=%{__ON_OFF sse42}
 
 %{__make} -C build
