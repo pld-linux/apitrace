@@ -33,6 +33,7 @@ BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRequires:	snappy-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel >= 1.2.6
+%{?with_sse42:Requires:	cpuinfo(sse4_2)}
 Requires:	libbrotli >= 1.0.7
 Requires:	zlib >= 1.2.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
