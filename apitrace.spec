@@ -1,8 +1,8 @@
-# TODO: waffle for EGL?
 #
 # Conditional build:
 %bcond_without	qt		# Qt GUI
 %bcond_with	qt6		# Qt 6 instead of Qt 5
+%bcond_without	waffle		# waffle for egltrace
 %bcond_with	sse42		# SSE 4.2 instructions
 
 %define		qt_ver	5.15
@@ -42,6 +42,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 1:3
 BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRequires:	snappy-devel
+%{?with_waffle:BuildRequires:	waffle-devel}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel >= 1.2.6
 BuildRequires:	zstd-devel >= 1.4.0
@@ -99,7 +100,8 @@ Oparte na Qt GUI do apitrace.
 	-DENABLE_STATIC_SNAPPY:BOOL=OFF \
 	-DENABLE_GUI:BOOL=%{__ON_OFF qt} \
 	%{?with_qt6:-DENABLE_QT6:BOOL=OFF} \
-	-DENABLE_SSE42:BOOL=%{__ON_OFF sse42}
+	-DENABLE_SSE42:BOOL=%{__ON_OFF sse42} \
+	%{?with_waffle:-DENABLE_WAFFLE:BOOL=ON} \
 
 %{__make} -C build
 
